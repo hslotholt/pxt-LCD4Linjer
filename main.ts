@@ -1,3 +1,4 @@
+//% weight=5 color=#2699BF icon="\uf110"
 namespace LCD_4x20 {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
