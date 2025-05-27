@@ -1,4 +1,7 @@
-//% weight=10 color=#0fbc11 icon="▀"
+/**
+ * Custom blocks
+ */
+//% weight=20 color=#0fbc11 icon="▀"
 namespace LCD_4x20 {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
