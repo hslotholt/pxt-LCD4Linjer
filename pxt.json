@@ -1,6 +1,6 @@
 {
     "name": "pxt-lcd4linjer",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Interface for I2C LCD 4x20",
     "dependencies": {
         "core": "*"
