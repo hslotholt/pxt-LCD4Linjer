@@ -1,5 +1,5 @@
 //% weight=5 color=#2699BF icon="\uf110"
-namespace LCD_4x20 {
+namespace LCD {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
     let charPos = 0;
@@ -56,7 +56,7 @@ namespace LCD_4x20 {
      * Tænd eller sluk baggrundslys
      * @param tændt Hvis sat til vil lyset blive tændt
      */
-    export function Baggrundslys(tændt: boolean) {
+    function Baggrundslys(tændt: boolean) {
         if (tændt) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
         pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
@@ -68,7 +68,7 @@ namespace LCD_4x20 {
      * @ param markørSynlig hvis eller skjul markøren
      * @ param blinkendeMarkør anvend blinkende markør
      */
-    export function Kontrol(tekstSynlig: boolean, markørSynlig: boolean, blinkendeMarkør: boolean) {
+    function Kontrol(tekstSynlig: boolean, markørSynlig: boolean, blinkendeMarkør: boolean) {
         let d = 0x08;
         if (tekstSynlig) d |= 0x04;
         if (markørSynlig) d |= 0x02;
