@@ -19,7 +19,7 @@ namespace LCD_4x20 {
         pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE);
         pause(2);
         writeLCD(false, 0x28);
-        displayControl(true, false, false);
+        Kontrol(true, false, false);
         writeLCD(false, 0x06); // cursor moves to right
         generateDKChars();
         RydLCD();
