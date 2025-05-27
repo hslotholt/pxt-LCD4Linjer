@@ -10,13 +10,13 @@ function initLCD() {
     lcdInitialized = true;
     writeLCD(false, 0x33);
     pause(2);
-    pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE, false);
-    pins.i2cWriteNumber(i2cAdr, 0x3c, NumberFormat.Int8LE, false);
-    pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE, false);
+    pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE);
+    pins.i2cWriteNumber(i2cAdr, 0x3c, NumberFormat.Int8LE);
+    pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE);
     pause(2);
-    pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE, false);
-    pins.i2cWriteNumber(i2cAdr, 0x2c, NumberFormat.Int8LE, false);
-    pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE, false);
+    pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE);
+    pins.i2cWriteNumber(i2cAdr, 0x2c, NumberFormat.Int8LE);
+    pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE);
     pause(2);
     writeLCD(false, 0x28);
     displayControl(true, false, false);
@@ -35,12 +35,12 @@ function writeLCD(dRegister: boolean, data: number) {
 
     if (ctrl != ctrlBits) {
         // If R/W or RS has changed we set that change before setting EN high
-        pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE, false);
+        pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE);
     }
-    pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | du, NumberFormat.Int8LE, false); // Set EN high
-    pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE, false); // Latch upper 4 bits
-    pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | dl, NumberFormat.Int8LE, false); // Set EN high
-    pins.i2cWriteNumber(i2cAdr, ctrl | dl, NumberFormat.Int8LE, false); // Latch lower 4 bits
+    pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | du, NumberFormat.Int8LE); // Set EN high
+    pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE); // Latch upper 4 bits
+    pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | dl, NumberFormat.Int8LE); // Set EN high
+    pins.i2cWriteNumber(i2cAdr, ctrl | dl, NumberFormat.Int8LE); // Latch lower 4 bits
     ctrlBits = ctrl;
 }
 
@@ -52,7 +52,7 @@ function clearLCD() {
 function setBacklight(on: boolean) {
     if (on) ctrlBits |= 0x08;
     else ctrlBits &= 0xf7;
-    pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE, false);
+    pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
 }
 
 function displayControl(displayOn: boolean, cursorOn: boolean, cursorBlinking: boolean) {

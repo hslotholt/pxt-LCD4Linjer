@@ -1,5 +1,5 @@
 {
-    "name": "Untitled",
+    "name": "pxt-lcd4linjer",
     "description": "",
     "dependencies": {
         "core": "*",
