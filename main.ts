@@ -1,7 +1,3 @@
-/**
- * Custom blocks
- */
-//% weight=20 color=#0fbc11 icon="▀"
 namespace LCD_4x20 {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
@@ -80,11 +76,11 @@ namespace LCD_4x20 {
     }
 
     function setCursorLocation(line: number, char: number) {
-        let d = 0x80 + char;
-        if (line == 1) d += 0x40;
-        if (line == 2) d += 0x14;
-        if (line == 3) d += 0x54;
-        writeLCD(false, d);
+        let e = 0x80 + char;
+        if (line == 1) e += 0x40;
+        if (line == 2) e += 0x14;
+        if (line == 3) e += 0x54;
+        writeLCD(false, e);
     }
 
     function generateDKChars() {
