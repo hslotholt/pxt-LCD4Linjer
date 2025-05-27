@@ -22,7 +22,7 @@ namespace LCD_4x20 {
         displayControl(true, false, false);
         writeLCD(false, 0x06); // cursor moves to right
         generateDKChars();
-        clearLCD();
+        RydLCD();
     }
 
     function writeLCD(dRegister: boolean, data: number) {
@@ -44,22 +44,35 @@ namespace LCD_4x20 {
         ctrlBits = ctrl;
     }
 
-    function clearLCD() {
+    /**
+     * Slet alt tekst på skærmen
+     */
+    export function RydLCD() {
         writeLCD(false, 0x01);
         pause(2);
     }
 
-    function setBacklight(on: boolean) {
-        if (on) ctrlBits |= 0x08;
+    /**
+     * Tænd eller sluk baggrundslys
+     * @param tændt Hvis sat til vil lyset blive tændt
+     */
+    export function Baggrundslys(tændt: boolean) {
+        if (tændt) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
         pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
     }
 
-    function displayControl(displayOn: boolean, cursorOn: boolean, cursorBlinking: boolean) {
+    /**
+     * Kontroller LCD tilstand
+     * @param tekstSynlig, hvis eller skjul teksten
+     * @ param markørSynlig hvis eller skjul markøren
+     * @ param blinkendeMarkør anvend blinkende markør
+     */
+    export function Kontrol(tekstSynlig: boolean, markørSynlig: boolean, blinkendeMarkør: boolean) {
         let d = 0x08;
-        if (displayOn) d |= 0x04;
-        if (cursorOn) d |= 0x02;
-        if (cursorBlinking) d |= 0x01;
+        if (tekstSynlig) d |= 0x04;
+        if (markørSynlig) d |= 0x02;
+        if (blinkendeMarkør) d |= 0x01;
         writeLCD(false, d);
     }
 
