@@ -1,5 +1,5 @@
 //% weight=5 color=#2699BF icon="\uf110"
-namespace LCD {
+namespace LCD_4x20 {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
     let charPos = 0;
@@ -47,6 +47,8 @@ namespace LCD {
     /**
      * Slet alt tekst på skærmen
      */
+    //% blockId=LCD_4x20_RydLCD
+    //% block=Slet skærmen
     export function RydLCD() {
         writeLCD(false, 0x01);
         pause(2);
@@ -54,9 +56,10 @@ namespace LCD {
 
     /**
      * Tænd eller sluk baggrundslys
-     * @param tændt Hvis sat til vil lyset blive tændt
      */
-    function Baggrundslys(tændt: boolean) {
+    //% blockId=LCD_4x20_Baggrundslys
+    //% block=Baggrundslys $tændt
+    export function Baggrundslys(tændt: boolean) {
         if (tændt) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
         pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
