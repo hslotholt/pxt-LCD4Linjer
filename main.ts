@@ -270,6 +270,7 @@ namespace LCD {
         writeLCD(false, 0x80); // Set pos to upper right
         let lineArr = [0, 2, 1, 3];
         for (let i = 0; i < 4; i++) {
+            if (i == 2) writeLCD(false, 0x40); // Set pos to line 2
             let lineOffset = lineArr[i] * 20;
             for(let x = 0; x < 20; x++) {
                 let c = 0x20;
