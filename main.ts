@@ -1,3 +1,9 @@
+enum testEnum {
+    PilHøjre,
+    PilVenstre,
+    Grader
+}
+
 //% weight=5 color=#2699BF icon="\uf110"
 namespace LCD {
     let i2cAdr = 0x27;
@@ -184,13 +190,7 @@ namespace LCD {
     export function writeText(str: string) {
         let written = 0;
         while (written < str.length) {
-            if (charPos > 20) {
-                charPos = 1;
-                lineNr += 1;
-                if (lineNr > 4) lineNr = 1;
-                setCursorLocation(lineNr, charPos);
-            }
-            let stop = written + Math.min(20 - charPos, str.length - written);
+            let stop = written + Math.min(21 - charPos, str.length - written);
 
             for (; written < stop; written++) {
                 let c = str.charCodeAt(written);
@@ -223,6 +223,12 @@ namespace LCD {
                 writeLCD(true, c);
             }
             charPos += written;
+            if (charPos > 20) {
+                charPos = 1;
+                lineNr += 1;
+                if (lineNr > 4) lineNr = 1;
+                setCursorLocation(lineNr, charPos);
+            }
         }
     }
 
@@ -233,5 +239,29 @@ namespace LCD {
     //% block="Skriv nummer $num"
     export function writeNumber(num: number) {
         writeText(num.toString());
+    }
+
+    //% block="Vis symbol $sym"
+    export function showSymbol(sym: testEnum) {
+        switch (sym) {
+            case testEnum.PilHøjre:
+                writeLCD(true, 0x7e);
+                break;
+            case testEnum.PilVenstre:
+                writeLCD(true, 0x7f);
+                break;
+            case testEnum.Grader:
+                writeLCD(true, 0xdf);
+                break;
+            default:
+                return;
+        }
+        charPos += 1;
+        if (charPos > 20) {
+            charPos = 1;
+            lineNr += 1;
+            if (lineNr > 4) lineNr = 1;
+            setCursorLocation(lineNr, charPos);
+        }
     }
 }
