@@ -2,8 +2,8 @@
 namespace LCD_4x20 {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
-    let charPos = 0;
-    let lineNr = 0;
+    let charPos = 1;
+    let lineNr = 1;
     let lcdInitialized = false;
 
     function initLCD() {
@@ -83,12 +83,12 @@ namespace LCD_4x20 {
      */
     //% blockId=LCD_4x20_setCursorLocation
     //% block="Sæt markør position linje $line kolonne $col"
-    //% line.min=0 line.max=3 col.min=0 col.max=19
+    //% line.min=1 line.max=4 col.min=1 col.max=20
     export function setCursorLocation(line: number, col: number) {
         let e = 0x80 + col;
-        if (line == 1) e += 0x40;
-        if (line == 2) e += 0x14;
-        if (line == 3) e += 0x54;
+        if (line == 2) e += 0x40;
+        if (line == 3) e += 0x14;
+        if (line == 4) e += 0x54;
         writeLCD(false, e);
     }
 
@@ -184,10 +184,10 @@ namespace LCD_4x20 {
     export function writeText(str: string) {
         let written = 0;
         while (written < str.length) {
-            if (charPos > 19) {
-                charPos = 0;
+            if (charPos > 20) {
+                charPos = 1;
                 lineNr += 1;
-                if (lineNr > 3) lineNr = 0;
+                if (lineNr > 4) lineNr = 1;
                 setCursorLocation(lineNr, charPos);
             }
             let stop = written + Math.min(20 - charPos, str.length - written);
@@ -224,5 +224,14 @@ namespace LCD_4x20 {
             }
             charPos += written;
         }
+    }
+
+    /**
+     * Skriv tal
+     */
+    //% blockId=LCD_4x20_writeNumber
+    //% block="Skriv nummer $num"
+    export function writeNumber(num: number) {
+        writeText(num.toString());
     }
 }
