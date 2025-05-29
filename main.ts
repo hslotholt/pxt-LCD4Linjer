@@ -261,25 +261,43 @@ namespace LCD {
     /**
      * Tegn på skræmen
      */
-    //% imageLiteral=1
+/*    
+    //% help=basic/show-leds
+    //% imageLiteral=1 async
     //% imageLiteralColumns=20
     //% imageLiteralRows=4
     //% blockId=LCD_4x20_draw
     //% block="Tegn"
+    //% parts="ledmatrix"
     export function draw(d: string) {
-        writeLCD(false, 0x80); // Set pos to upper right
+        clearLCD();
+        let c = 0x20;
+        basic.showNumber(0);
+        basic.pause(1000);
+        let im = <Image><any>d;
+        basic.showNumber(1);
+        basic.pause(1000);
+        if (im.width() == 1) c = 0xff;
+        basic.showNumber(2);
+        basic.pause(1000);
         let lineArr = [0, 2, 1, 3];
-        for (let i = 0; i < 4; i++) {
-            if (i == 2) writeLCD(false, 0x40); // Set pos to line 2
+        for (let i = 0; i < 1; i++) {
             let lineOffset = lineArr[i] * 20;
+            basic.showNumber(3);
+            if (i == 2) writeLCD(false, 0x40); // Set pos to line 2
             for(let x = 0; x < 20; x++) {
-                let c = 0x20;
-                if (d.charCodeAt(lineOffset + x) == 35) c = 0xff;
+                basic.showNumber(4);
+                c = 0x20;
+                if(d.charCodeAt(lineOffset + x)) c = 0xff;
+                basic.showNumber(5);
                 writeLCD(true, c);
             }
+            basic.showNumber(6);
         }
-        writeLCD(false, 0x80); // Set pos to upper right
+//        writeLCD(false, 0x80); // Set pos to upper right
         lineNr = 1;
         charPos = 1;
+        basic.showNumber(6);
     }
+    */
 }
