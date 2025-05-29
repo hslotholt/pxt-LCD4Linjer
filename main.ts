@@ -139,7 +139,8 @@ namespace LCD {
      * Tænd eller sluk baggrundslys
      */
     //% blockId=LCD_4x20_backgroundLight
-    //% block="Baggrundslys tændt $on"
+    //% block="Baggrundslys $on"
+    //% on.shadow="toggleOnOff"
     export function backgroundLight(on: boolean) {
         if (on) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
@@ -160,7 +161,10 @@ namespace LCD {
      * Sæt LCD tilstand
      */
     //% blockId=LCD_4x20_displayControl
-    //% block="Kontroller skærm tændt $displayOn markør tændt $cursorOn blinkende markør $flashingCursor"
+    //% block="Kontroller skærm $displayOn markør $cursorOn blinkende markør $flashingCursor"
+    //% displayOn.shadow="toggleOnOff"
+    //% cursorOn.shadow="toggleOnOff"
+    //% flashingCursor.shadow="toggleOnOff"
     export function displayControl(displayOn: boolean, cursorOn: boolean, flashingCursor: boolean) {
         let d = 0x08;
         if (displayOn) d |= 0x04;
