@@ -22,7 +22,7 @@ namespace LCD_4x20 {
         Kontrol(true, false, false);
         writeLCD(false, 0x06); // cursor moves to right
         generateDKChars();
-        RydLCD();
+        ClearLCD();
     }
 
     function writeLCD(dRegister: boolean, data: number) {
@@ -49,7 +49,7 @@ namespace LCD_4x20 {
      */
     //% blockId=LCD_4x20_RydLCD
     //% block="Slet skærmen"
-    export function RydLCD() {
+    export function ClearLCD() {
         writeLCD(false, 0x01);
         pause(2);
     }
@@ -58,9 +58,9 @@ namespace LCD_4x20 {
      * Tænd eller sluk baggrundslys
      */
     //% blockId=LCD_4x20_Baggrundslys
-    //% block="Baggrundslys $tændt"
-    export function Baggrundslys(tændt: boolean) {
-        if (tændt) ctrlBits |= 0x08;
+    //% block="Baggrundslys $on"
+    export function BackgroundLight(on: boolean) {
+        if (on) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
         pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
     }
