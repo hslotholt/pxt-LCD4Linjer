@@ -1,5 +1,5 @@
 //% weight=5 color=#2699BF icon="\uf110"
-namespace LCD_4x20 {
+namespace LCD {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
     let charPos = 1;
@@ -42,54 +42,6 @@ namespace LCD_4x20 {
         pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | dl, NumberFormat.Int8LE); // Set EN high
         pins.i2cWriteNumber(i2cAdr, ctrl | dl, NumberFormat.Int8LE); // Latch lower 4 bits
         ctrlBits = ctrl;
-    }
-
-    /**
-     * Slet alt tekst på skærmen
-     */
-    //% blockId=LCD_4x20_clearLCD
-    //% block="Slet skærmen"
-    export function clearLCD() {
-        writeLCD(false, 0x01);
-        pause(2);
-    }
-
-    /**
-     * Tænd eller sluk baggrundslys
-     */
-    //% blockId=LCD_4x20_backgroundLight
-    //% block="Baggrundslys tændt $on"
-    export function backgroundLight(on: boolean) {
-        if (on) ctrlBits |= 0x08;
-        else ctrlBits &= 0xf7;
-        pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
-    }
-
-    /**
-     * Kontroller LCD tilstand
-     */
-    //% blockId=LCD_4x20_displayControl
-    //% block="Kontrol skærm tændt $displayOn markør tændt $cursorOn blinkende markør $flashingCursor"
-    export function displayControl(displayOn: boolean, cursorOn: boolean, flashingCursor: boolean) {
-        let d = 0x08;
-        if (displayOn) d |= 0x04;
-        if (cursorOn) d |= 0x02;
-        if (flashingCursor) d |= 0x01;
-        writeLCD(false, d);
-    }
-
-    /**
-     * Set markør position
-     */
-    //% blockId=LCD_4x20_setCursorLocation
-    //% block="Sæt markør position linje $line kolonne $col"
-    //% line.min=1 line.max=4 line.default=1 col.min=1 col.max=20
-    export function setCursorLocation(line: number, col: number) {
-        let e = 0x80 + col;
-        if (line == 2) e += 0x40;
-        if (line == 3) e += 0x14;
-        if (line == 4) e += 0x54;
-        writeLCD(false, e);
     }
 
     function generateDKChars() {
@@ -174,6 +126,54 @@ namespace LCD_4x20 {
         writeLCD(true, 0x0e);
 
         writeLCD(false, 0x80);
+    }
+
+    /**
+     * Tænd eller sluk baggrundslys
+     */
+    //% blockId=LCD_4x20_backgroundLight
+    //% block="Baggrundslys tændt $on"
+    export function backgroundLight(on: boolean) {
+        if (on) ctrlBits |= 0x08;
+        else ctrlBits &= 0xf7;
+        pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
+    }
+
+    /**
+     * Slet alt tekst på skærmen
+     */
+    //% blockId=LCD_4x20_clearLCD
+    //% block="Slet skærmen"
+    export function clearLCD() {
+        writeLCD(false, 0x01);
+        pause(2);
+    }
+
+    /**
+     * Sæt LCD tilstand
+     */
+    //% blockId=LCD_4x20_displayControl
+    //% block="Kontroller skærm tændt $displayOn markør tændt $cursorOn blinkende markør $flashingCursor"
+    export function displayControl(displayOn: boolean, cursorOn: boolean, flashingCursor: boolean) {
+        let d = 0x08;
+        if (displayOn) d |= 0x04;
+        if (cursorOn) d |= 0x02;
+        if (flashingCursor) d |= 0x01;
+        writeLCD(false, d);
+    }
+
+    /**
+     * Set markør position
+     */
+    //% blockId=LCD_4x20_setCursorLocation
+    //% block="Sæt markør position linje $line kolonne $col"
+    //% line.min=1 line.max=4 line.defl=1 col.min=1 col.max=20 col.defl=1
+    export function setCursorLocation(line: number, col: number) {
+        let e = 0x80 + col;
+        if (line == 2) e += 0x40;
+        if (line == 3) e += 0x14;
+        if (line == 4) e += 0x54;
+        writeLCD(false, e);
     }
 
     /**
