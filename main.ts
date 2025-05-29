@@ -83,7 +83,7 @@ namespace LCD_4x20 {
      */
     //% blockId=LCD_4x20_setCursorLocation
     //% block="Sæt markør position linje $line kolonne $col"
-    //% line.min=1 line.max=4 col.min=1 col.max=20
+    //% line.min=1 line.max=4 line.default=1 col.min=1 col.max=20
     export function setCursorLocation(line: number, col: number) {
         let e = 0x80 + col;
         if (line == 2) e += 0x40;
