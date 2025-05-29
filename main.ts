@@ -58,7 +58,7 @@ namespace LCD_4x20 {
      * Tænd eller sluk baggrundslys
      */
     //% blockId=LCD_4x20_Baggrundslys
-    //% block="Baggrundslys $on"
+    //% block="Baggrundslys tændt $on"
     export function BackgroundLight(on: boolean) {
         if (on) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
