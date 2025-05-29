@@ -58,9 +58,9 @@ namespace LCD_4x20 {
      * Tænd eller sluk baggrundslys
      */
     //% blockId=LCD_4x20_Baggrundslys
-    //% block="Baggrundslys $taendt"
-    export function Baggrundslys(on: boolean) {
-        if (on) ctrlBits |= 0x08;
+    //% block="Baggrundslys $tændt"
+    export function Baggrundslys(tændt: boolean) {
+        if (tændt) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
         pins.i2cWriteNumber(i2cAdr, ctrlBits, NumberFormat.Int8LE);
     }
