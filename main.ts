@@ -1,7 +1,8 @@
 enum testEnum {
-    PilHøjre,
-    PilVenstre,
-    Grader
+    PilHøjre = 0x7e,
+    PilVenstre = 0x7f,
+    Grader = 0xdf,
+    Firkant = 0xff,
 }
 
 //% weight=5 color=#2699BF icon="\uf110"
@@ -241,21 +242,13 @@ namespace LCD {
         writeText(num.toString());
     }
 
+    /**
+     * Vis symbol
+     */
+    //% blockId=LCD_4x20_showNumber
     //% block="Vis symbol $sym"
     export function showSymbol(sym: testEnum) {
-        switch (sym) {
-            case testEnum.PilHøjre:
-                writeLCD(true, 0x7e);
-                break;
-            case testEnum.PilVenstre:
-                writeLCD(true, 0x7f);
-                break;
-            case testEnum.Grader:
-                writeLCD(true, 0xdf);
-                break;
-            default:
-                return;
-        }
+        writeLCD(true, sym);
         charPos += 1;
         if (charPos > 20) {
             charPos = 1;
@@ -263,5 +256,29 @@ namespace LCD {
             if (lineNr > 4) lineNr = 1;
             setCursorLocation(lineNr, charPos);
         }
+    }
+
+    /**
+     * Tegn på skræmen
+     */
+    //% imageLiteral=1
+    //% imageLiteralColumns=20
+    //% imageLiteralRows=4
+    //% blockId=LCD_4x20_draw
+    //% block="Tegn"
+    export function draw(d: string) {
+        writeLCD(false, 0x80); // Set pos to upper right
+        let lineArr = [0, 2, 1, 3];
+        for (let i = 0; i < 4; i++) {
+            let lineOffset = lineArr[i] * 20;
+            for(let x = 0; x < 20; x++) {
+                let c = 0x20;
+                if (d[lineOffset + x] == "#") c = 0xff;
+                writeLCD(true, c);
+            }
+        }
+        writeLCD(false, 0x80); // Set pos to upper right
+        lineNr = 1;
+        charPos = 1;
     }
 }
