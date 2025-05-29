@@ -266,7 +266,6 @@ namespace LCD {
     //% imageLiteralRows=4
     //% blockId=LCD_4x20_draw
     //% block="Tegn"
-    //% shim=images::createImage
     export function draw(d: string) {
         writeLCD(false, 0x80); // Set pos to upper right
         let lineArr = [0, 2, 1, 3];
