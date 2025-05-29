@@ -3,9 +3,23 @@ enum testEnum {
     PilVenstre = 0x7f,
     Grader = 0xdf,
     Firkant = 0xff,
+    Uendelig = 0xf3,
+    EnOver = 0xe9,
+    Division = 0xfd,
+    Kvadratrod = 0xe8,
+    Alpha = 0xe0,
+    Beta = 0xe2,
+    Episilon = 0xe3,
+    Micro = 0xe4,
+    Omega = 0xf4,
+    Pi = 0xf7,
+    SigmaLille = 0xe5,
+    SigmaStor = 0xf6,
+    Theta = 0xf2,
+    InverteretX = 0xf8,
 }
 
-//% weight=5 color=#2699BF icon="\uf110"
+//% weight=5 color=#2699BF icon="\uf26c"
 namespace LCD {
     let i2cAdr = 0x27;
     let ctrlBits = 0xf8; // Initialize upper bits to one, this ensures we wait for setup of R/W and RS during first use
