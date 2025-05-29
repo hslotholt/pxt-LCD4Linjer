@@ -48,7 +48,7 @@ namespace LCD_4x20 {
      * Slet alt tekst på skærmen
      */
     //% blockId=LCD_4x20_RydLCD
-    //% block=Slet skaermen
+    //% block="Slet skærmen"
     export function RydLCD() {
         writeLCD(false, 0x01);
         pause(2);
@@ -58,7 +58,7 @@ namespace LCD_4x20 {
      * Tænd eller sluk baggrundslys
      */
     //% blockId=LCD_4x20_Baggrundslys
-    //% block=Baggrundslys $taendt
+    //% block="Baggrundslys $taendt"
     export function Baggrundslys(on: boolean) {
         if (on) ctrlBits |= 0x08;
         else ctrlBits &= 0xf7;
