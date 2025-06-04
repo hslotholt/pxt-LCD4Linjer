@@ -31,13 +31,13 @@ namespace LCD {
         lcdInitialized = true;
         writeLCD(false, 0x33);
         pause(2);
-        pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE);
-        pins.i2cWriteNumber(i2cAdr, 0x3c, NumberFormat.Int8LE);
-        pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE);
+        pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE, true);
+        pins.i2cWriteNumber(i2cAdr, 0x3c, NumberFormat.Int8LE, true);
+        pins.i2cWriteNumber(i2cAdr, 0x38, NumberFormat.Int8LE, false);
         pause(2);
-        pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE);
-        pins.i2cWriteNumber(i2cAdr, 0x2c, NumberFormat.Int8LE);
-        pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE);
+        pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE, true);
+        pins.i2cWriteNumber(i2cAdr, 0x2c, NumberFormat.Int8LE, true);
+        pins.i2cWriteNumber(i2cAdr, 0x28, NumberFormat.Int8LE, false);
         pause(2);
         writeLCD(false, 0x28);
         displayControl(true, false, false);
@@ -56,12 +56,12 @@ namespace LCD {
 
         if (ctrl != ctrlBits) {
             // If R/W or RS has changed we set that change before setting EN high
-            pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE);
+            pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE, true);
         }
-        pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | du, NumberFormat.Int8LE); // Set EN high
-        pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE); // Latch upper 4 bits
-        pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | dl, NumberFormat.Int8LE); // Set EN high
-        pins.i2cWriteNumber(i2cAdr, ctrl | dl, NumberFormat.Int8LE); // Latch lower 4 bits
+        pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | du, NumberFormat.Int8LE, true); // Set EN high
+        pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE, true); // Latch upper 4 bits
+        pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | dl, NumberFormat.Int8LE, true); // Set EN high
+        pins.i2cWriteNumber(i2cAdr, ctrl | dl, NumberFormat.Int8LE, false); // Latch lower 4 bits
         ctrlBits = ctrl;
     }
 
