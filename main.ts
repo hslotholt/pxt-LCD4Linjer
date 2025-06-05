@@ -53,15 +53,28 @@ namespace LCD {
         let dl = data << 4;
         let ctrl = ctrlBits & 0x08;
         if (dRegister) ctrl |= 0x01;
+        let bufSize = 4;
+        if (ctrl != ctrlBits) bufSize += 1;
+        
+        let buf = Buffer.create(bufSize);
+        let bufIndex = 0;
 
         if (ctrl != ctrlBits) {
             // If R/W or RS has changed we set that change before setting EN high
-            pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE, true);
+            buf.setNumber(NumberFormat.Int8LE, bufIndex, ctrl | du);
+            bufIndex++;
         }
-        pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | du, NumberFormat.Int8LE, true); // Set EN high
-        pins.i2cWriteNumber(i2cAdr, ctrl | du, NumberFormat.Int8LE, true); // Latch upper 4 bits
-        pins.i2cWriteNumber(i2cAdr, 0x04 | ctrl | dl, NumberFormat.Int8LE, true); // Set EN high
-        pins.i2cWriteNumber(i2cAdr, ctrl | dl, NumberFormat.Int8LE, false); // Latch lower 4 bits
+        buf.setNumber(NumberFormat.Int8LE, bufIndex, 0x04 | ctrl | du);
+        bufIndex++;
+        buf.setNumber(NumberFormat.Int8LE, bufIndex, ctrl | du);
+        bufIndex++;
+        buf.setNumber(NumberFormat.Int8LE, bufIndex, 0x04 | ctrl | dl);
+        bufIndex++;
+        buf.setNumber(NumberFormat.Int8LE, bufIndex, ctrl | dl);
+        bufIndex++;
+
+        pins.i2cWriteBuffer(i2cAdr, buf);
+
         ctrlBits = ctrl;
     }
 
