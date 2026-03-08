@@ -58,24 +58,74 @@ namespace LCD {
         
         let buf = Buffer.create(bufSize);
         let bufIndex = 0;
-
+ 
         if (ctrl != ctrlBits) {
             // If R/W or RS has changed we set that change before setting EN high
-            buf.setNumber(NumberFormat.Int8LE, bufIndex, ctrl | du);
-            bufIndex++;
+            buf.setNumber(NumberFormat.Int8LE, bufIndex++, ctrl | du);
         }
-        buf.setNumber(NumberFormat.Int8LE, bufIndex, 0x04 | ctrl | du);
-        bufIndex++;
-        buf.setNumber(NumberFormat.Int8LE, bufIndex, ctrl | du);
-        bufIndex++;
-        buf.setNumber(NumberFormat.Int8LE, bufIndex, 0x04 | ctrl | dl);
-        bufIndex++;
+        buf.setNumber(NumberFormat.Int8LE, bufIndex++, 0x04 | ctrl | du);
+        buf.setNumber(NumberFormat.Int8LE, bufIndex++, ctrl | du);
+        buf.setNumber(NumberFormat.Int8LE, bufIndex++, 0x04 | ctrl | dl);
         buf.setNumber(NumberFormat.Int8LE, bufIndex, ctrl | dl);
-        bufIndex++;
 
         pins.i2cWriteBuffer(i2cAdr, buf);
-
         ctrlBits = ctrl;
+    }
+
+    function writeLCDBuffer(data: string[]) {
+        if (!lcdInitialized) initLCD();
+        let ctrl = (ctrlBits & 0x08);
+        let bufSize = 0;
+        bufSize += (data.length - 1) * 6; // space for setting cursor location
+
+        for (let i = 0; i < data.length; i++) {
+            bufSize += data[i].length * 4;
+        }
+
+        if (charPos > 20) {
+            bufSize += 5; // space for setting cursor location
+        }
+        else ctrl |= 0x01;
+
+        if (ctrl != ctrlBits) bufSize += 1;
+
+        let buf = Buffer.create(bufSize);
+        let bufIndex = 0;
+
+        if (ctrl != ctrlBits) buf.setNumber(NumberFormat.Int8LE, bufIndex++, ctrl);
+
+        for (let i = 0; i < data.length; i++) 
+        {
+            if (charPos > 20)
+            {
+                charPos = 1;
+                lineNr += 1;
+                if (lineNr > 4) lineNr = 1;
+                let e = 0x80;
+                if (lineNr == 2) e += 0x40;
+                if (lineNr == 3) e += 0x14;
+                if (lineNr == 4) e += 0x54;
+                if (i != 0) buf.setNumber(NumberFormat.Int8LE, bufIndex++, ctrlBits | 0x08);
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, 0x04 | (ctrlBits | 0x08) | (e & 0xf0));
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, (ctrlBits | 0x08) | (e & 0xf0));
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, 0x04 | (ctrlBits | 0x08) | (e << 4));
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, (ctrlBits | 0x08) | (e << 4));
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, ctrlBits | 0x09);
+            }
+            let str = data[i];
+            for (let j = 0; j < str.length; j++)
+            {
+                let c = str.charCodeAt(j);
+                let du = c & 0xf0;
+                let dl = c << 4;
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, 0x04 | (ctrlBits | 0x09) | du);
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, (ctrlBits | 0x09) | du);
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, 0x04 | (ctrlBits | 0x09) | dl);
+                buf.setNumber(NumberFormat.Int8LE, bufIndex++, (ctrlBits | 0x09) | dl);
+            }
+        }
+        pins.i2cWriteBuffer(i2cAdr, buf);
+        ctrlBits |= 0x09;
     }
 
     function generateDKChars() {
@@ -207,7 +257,7 @@ namespace LCD {
     //% block="Sæt markør position linje $line kolonne $col"
     //% line.min=1 line.max=4 line.defl=1 col.min=1 col.max=20 col.defl=1
     export function setCursorLocation(line: number, col: number) {
-        let e = 0x80 + col;
+        let e = 0x80 + (col - 1);
         if (line == 2) e += 0x40;
         if (line == 3) e += 0x14;
         if (line == 4) e += 0x54;
