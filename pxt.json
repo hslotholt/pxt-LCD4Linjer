@@ -1,6 +1,6 @@
 {
     "name": "pxt-lcd4linjer",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Interface for I2C LCD 4x20",
     "license": "MIT",
     "dependencies": {
@@ -11,11 +11,9 @@
         "main.ts",
         "README.md"
     ],
-    "testFiles": [
-        "test.ts"
-    ],
+    "testFiles": [],
     "targetVersions": {
-        "target": "8.0.18",
+        "target": "9.0.12",
         "targetId": "microbit"
     },
     "supportedTargets": [
